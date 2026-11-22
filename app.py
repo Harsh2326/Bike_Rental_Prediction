@@ -239,6 +239,19 @@ hr {
 .footer p {
     color: #94a3b8 !important;
 }
+.footer {
+    text-align: center;
+    color: #94a3b8 !important;
+    padding: 20px;
+    font-size: 13px;
+}
+
+/* NEW COLOR CODE */
+div[data-testid="stAlert"] p,
+div[data-testid="stAlert"] span,
+div[data-testid="stAlert"] div {
+    color: #102a43 !important;
+}
 
 </style>
 """, unsafe_allow_html=True)
