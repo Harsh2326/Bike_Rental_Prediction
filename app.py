@@ -4,15 +4,21 @@ import pandas as pd
 import joblib
 from datetime import date
 
-# ---------------- PAGE CONFIG ----------------
+# ==================================================
+# PAGE CONFIGURATION
+# ==================================================
+
 st.set_page_config(
-    page_title="Bike Rental | P716",
+    page_title="Bike Rental Prediction | P716",
     page_icon="🚲",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# ---------------- LOAD MODEL ----------------
+# ==================================================
+# LOAD MODEL FILES
+# ==================================================
+
 @st.cache_resource
 def load_files():
     model = joblib.load("best_xgb_model.pkl")
@@ -20,126 +26,152 @@ def load_files():
     scaler = joblib.load("scaler.pkl")
     return model, feature_columns, scaler
 
-model, feature_columns, scaler = load_files()
 
-# ---------------- CUSTOM CSS ----------------
+try:
+    model, feature_columns, scaler = load_files()
+except Exception as e:
+    st.error(f"Unable to load model files: {e}")
+    st.stop()
+
+
+# ==================================================
+# CUSTOM CSS - DARK PREMIUM THEME
+# ==================================================
+
 st.markdown("""
 <style>
+
 .stApp {
-    background: #0b1120;
-    color: #f1f5f9;
+    background-color: #0b1120;
+    color: #e5e7eb;
 }
 
 [data-testid="stSidebar"] {
-    background: #111827;
-    border-right: 1px solid #263449;
-}
-
-.block-container {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-    max-width: 1400px;
-}
-
-.hero {
-    background: linear-gradient(120deg, #172554, #123047, #064e3b);
-    padding: 30px;
-    border-radius: 18px;
-    border: 1px solid #31516a;
-    margin-bottom: 25px;
-}
-
-.hero h1 {
-    color: white;
-    font-size: 36px;
-    margin-bottom: 8px;
-}
-
-.hero p {
-    color: #cbd5e1;
-    font-size: 16px;
-}
-
-.metric-card {
-    background: #151f32;
-    border: 1px solid #293951;
-    padding: 22px;
-    border-radius: 15px;
-    min-height: 125px;
-}
-
-.metric-label {
-    color: #94a3b8;
-    font-size: 14px;
-}
-
-.metric-value {
-    color: #f8fafc;
-    font-size: 28px;
-    font-weight: 700;
-    margin-top: 8px;
-}
-
-.result-card {
-    background: linear-gradient(120deg, #064e3b, #14532d);
-    border: 1px solid #22c55e;
-    border-radius: 18px;
-    padding: 28px;
-    text-align: center;
-}
-
-.result-number {
-    color: white;
-    font-size: 48px;
-    font-weight: 800;
-}
-
-.result-label {
-    color: #bbf7d0;
-    font-size: 16px;
-}
-
-.section-title {
-    color: #f8fafc;
-    font-size: 23px;
-    font-weight: 700;
-    margin-top: 20px;
-    margin-bottom: 15px;
-}
-
-div.stButton > button {
-    background: #0d9488;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 12px 25px;
-    font-weight: 700;
-    width: 100%;
-}
-
-div.stButton > button:hover {
-    background: #0f766e;
-    color: white;
-    border: none;
-}
-
-footer {
-    visibility: hidden;
-}
-
-[data-testid="stSidebar"] {
-    background: #111827;
+    background-color: #111827;
     border-right: 1px solid #263449;
 }
 
 [data-testid="stSidebar"] * {
     color: #e5e7eb !important;
 }
-    
-# ---------------- SIDEBAR ----------------
+
+.block-container {
+    max-width: 1400px;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+h1, h2, h3 {
+    color: #f8fafc !important;
+}
+
+p, label, span {
+    color: #cbd5e1;
+}
+
+[data-testid="stMetric"] {
+    background-color: #151f32;
+    border: 1px solid #293951;
+    padding: 20px;
+    border-radius: 14px;
+}
+
+[data-testid="stMetricLabel"] {
+    color: #94a3b8 !important;
+}
+
+[data-testid="stMetricValue"] {
+    color: #ffffff !important;
+}
+
+div[data-testid="stForm"] {
+    background-color: #151f32;
+    border: 1px solid #293951;
+    border-radius: 15px;
+    padding: 22px;
+}
+
+div.stButton > button,
+div[data-testid="stFormSubmitButton"] button {
+    background-color: #0d9488;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    min-height: 45px;
+}
+
+div.stButton > button:hover,
+div[data-testid="stFormSubmitButton"] button:hover {
+    background-color: #0f766e;
+    color: white;
+}
+
+div[data-testid="stAlert"] {
+    border-radius: 12px;
+}
+
+hr {
+    border-color: #293951;
+}
+
+.hero-card {
+    background: linear-gradient(120deg, #172554, #123047, #064e3b);
+    border: 1px solid #31516a;
+    border-radius: 18px;
+    padding: 30px;
+    margin-bottom: 25px;
+}
+
+.hero-card h1 {
+    color: white !important;
+    font-size: 34px;
+    margin-bottom: 8px;
+}
+
+.hero-card p {
+    color: #cbd5e1;
+    font-size: 16px;
+}
+
+.result-card {
+    background: linear-gradient(120deg, #064e3b, #14532d);
+    border: 1px solid #22c55e;
+    border-radius: 18px;
+    padding: 30px;
+    text-align: center;
+}
+
+.result-card h2 {
+    color: #bbf7d0 !important;
+    font-size: 18px;
+}
+
+.result-card h1 {
+    color: white !important;
+    font-size: 48px;
+}
+
+.footer {
+    text-align: center;
+    color: #64748b;
+    padding: 20px;
+    font-size: 13px;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+
+# ==================================================
+# SIDEBAR NAVIGATION
+# ==================================================
+
 with st.sidebar:
+
     st.markdown("## 🚲 BIKE RENTAL")
     st.caption("P716 | Data Science Project")
+
     st.divider()
 
     page = st.radio(
@@ -153,86 +185,100 @@ with st.sidebar:
     )
 
     st.divider()
+
     st.caption("Developed for ExcelR P716")
     st.caption("Machine Learning Application")
 
 
-# ---------------- HEADER ----------------
+# ==================================================
+# MAIN HEADER
+# ==================================================
+
 st.markdown("""
-<div class="hero">
+<div class="hero-card">
     <h1>🚲 Bike Rental Demand Prediction</h1>
     <p>Smart Machine Learning Dashboard | P716 Data Science Project</p>
 </div>
 """, unsafe_allow_html=True)
 
-# ---------------- OVERVIEW ----------------
+
+# ==================================================
+# OVERVIEW PAGE
+# ==================================================
+
 if page == "Overview":
 
-    st.markdown("## Dashboard Overview")
+    st.header("Dashboard Overview")
+
     st.write(
-        "Predict bike rental demand using weather, date and time-based "
-        "features with a trained XGBoost Machine Learning model."
+        "Predict bike rental demand using date, time, season "
+        "and weather information with a trained XGBoost model."
     )
 
-    c1, c2, c3 = st.columns(3)
+    st.divider()
 
-    with c1:
-        st.markdown("""
-        <div class="metric-card">
-            <div class="metric-label">Selected ML Model</div>
-            <div class="metric-value">XGBoost</div>
-        </div>
-        """, unsafe_allow_html=True)
+    col1, col2, col3 = st.columns(3)
 
-    with c2:
-        st.markdown("""
-        <div class="metric-card">
-            <div class="metric-label">Model R² Score</div>
-            <div class="metric-value">96.05%</div>
-        </div>
-        """, unsafe_allow_html=True)
+    with col1:
+        st.metric(
+            label="Machine Learning Model",
+            value="XGBoost"
+        )
 
-    with c3:
-        st.markdown("""
-        <div class="metric-card">
-            <div class="metric-label">Prediction Type</div>
-            <div class="metric-value">Regression</div>
-        </div>
-        """, unsafe_allow_html=True)
+    with col2:
+        st.metric(
+            label="R² Score",
+            value="96.05%"
+        )
 
-    st.markdown('<div class="section-title">Project Highlights</div>',
-                unsafe_allow_html=True)
+    with col3:
+        st.metric(
+            label="Prediction Type",
+            value="Regression"
+        )
 
-    a, b = st.columns(2)
+    st.subheader("Project Highlights")
 
-    with a:
-        st.info("📊 Exploratory Data Analysis and Data Visualization")
-        st.info("⚙️ Feature Engineering and Data Preprocessing")
-        st.info("🤖 Machine Learning Model Comparison")
+    left, right = st.columns(2)
 
-    with b:
-        st.success("🌳 Tuned XGBoost Regression Model")
-        st.success("📈 Model Evaluation and Performance")
-        st.success("🚀 Streamlit Web Application Deployment")
+    with left:
+        st.info("📊 Exploratory Data Analysis")
+        st.info("⚙️ Feature Engineering")
+        st.info("🧹 Data Preprocessing")
 
-    st.markdown("---")
-    st.markdown("### Start Prediction")
-    st.write("Go to the Prediction section to estimate bike rental demand.")
+    with right:
+        st.success("🌳 Tuned XGBoost Model")
+        st.success("📈 Model Evaluation")
+        st.success("🚀 Streamlit Deployment")
 
-    if st.button("Open Prediction Page"):
-        st.session_state["navigation_prediction"] = True
-        st.info("Select Prediction from the sidebar to continue.")
+    st.divider()
+
+    st.subheader("How It Works")
+
+    st.write("""
+    1. Enter the date and time.
+    2. Select season and weather conditions.
+    3. Enter temperature, humidity and windspeed.
+    4. Click Predict Bike Rentals.
+    5. View the estimated bike rental demand.
+    """)
 
 
-# ---------------- PREDICTION ----------------
+# ==================================================
+# PREDICTION PAGE
+# ==================================================
+
 elif page == "Prediction":
 
-    st.markdown("## 🔮 Bike Rental Prediction")
-    st.write("Enter the required details to predict bike rental demand.")
+    st.header("🔮 Bike Rental Prediction")
+
+    st.write(
+        "Enter the required details to estimate bike rental demand."
+    )
 
     with st.form("prediction_form"):
 
-        st.markdown("### 📅 Date and Time")
+        st.subheader("📅 Date and Time")
 
         col1, col2, col3 = st.columns(3)
 
@@ -257,7 +303,9 @@ elif page == "Prediction":
                 ["spring", "summer", "fall", "winter"]
             )
 
-        st.markdown("### 🌤️ Weather Information")
+        st.divider()
+
+        st.subheader("🌤️ Weather Information")
 
         col4, col5, col6 = st.columns(3)
 
@@ -315,28 +363,34 @@ elif page == "Prediction":
         workingday = st.selectbox(
             "Working Day",
             [0, 1],
-            format_func=lambda x: "Working Day" if x == 1 else "No Work"
+            format_func=lambda x: (
+                "Working Day" if x == 1 else "No Work"
+            )
         )
 
-        st.markdown("---")
+        st.divider()
 
         submitted = st.form_submit_button(
             "🚀 Predict Bike Rentals",
             use_container_width=True
         )
 
+    # ==================================================
+    # PREDICTION LOGIC
+    # ==================================================
+
     if submitted:
 
-        # Date-based features
+        # Date features
         yr = selected_date.year - 2011
         mnth = selected_date.month
         day = selected_date.day
         dayofyear = selected_date.timetuple().tm_yday
 
-        # Dataset weekday: Sunday=0, Monday=1, ..., Saturday=6
+        # Dataset weekday: Sunday=0, Monday=1 ... Saturday=6
         weekday = (selected_date.weekday() + 1) % 7
 
-        # Time period
+        # Day period
         if hour <= 5:
             day_period = "Night"
         elif hour <= 11:
@@ -348,7 +402,7 @@ elif page == "Prediction":
         else:
             day_period = "Late Night"
 
-        # Original features
+        # Original input features
         input_data = {
             "yr": yr,
             "mnth": mnth,
@@ -363,86 +417,135 @@ elif page == "Prediction":
             "dayofyear": dayofyear
         }
 
-        # Season encoding
+        # Season one-hot encoding
         for value in ["spring", "summer", "winter"]:
-            input_data[f"season_{value}"] = int(season == value)
+            input_data[f"season_{value}"] = int(
+                season == value
+            )
 
-        # Day period encoding
-        for value in ["Morning", "Afternoon", "Evening", "Late Night"]:
-            input_data[f"day_period_{value}"] = int(day_period == value)
+        # Day period one-hot encoding
+        for value in [
+            "Morning",
+            "Afternoon",
+            "Evening",
+            "Late Night"
+        ]:
+            input_data[f"day_period_{value}"] = int(
+                day_period == value
+            )
 
-        # Weather encoding
-        for value in ["Heavy Rain", "Light Snow", "Mist"]:
-            input_data[f"weathersit_{value}"] = int(weather == value)
+        # Weather one-hot encoding
+        for value in [
+            "Heavy Rain",
+            "Light Snow",
+            "Mist"
+        ]:
+            input_data[f"weathersit_{value}"] = int(
+                weather == value
+            )
 
-        # Weekday encoding
+        # Weekday one-hot encoding
         for value in range(1, 7):
-            input_data[f"weekday_{value}"] = int(weekday == value)
+            input_data[f"weekday_{value}"] = int(
+                weekday == value
+            )
 
-        # Arrange columns in training order
+        # Create DataFrame in exact training order
         input_df = pd.DataFrame([input_data])
+
         input_df = input_df.reindex(
             columns=feature_columns,
             fill_value=0
         )
 
-        # Scale numerical columns
-        scaled_columns = ["temp", "atemp", "hum", "windspeed"]
+        # Apply saved scaler
+        scaled_columns = [
+            "temp",
+            "atemp",
+            "hum",
+            "windspeed"
+        ]
 
         input_df[scaled_columns] = scaler.transform(
             input_df[scaled_columns]
         )
 
-        # Prediction
+        # Model prediction
         prediction = model.predict(input_df)[0]
-        prediction = max(0, round(float(prediction)))
 
-        st.markdown("---")
-        st.markdown("## 🎯 Prediction Result")
+        prediction = max(
+            0,
+            round(float(prediction))
+        )
 
-        st.markdown(f"""
-        <div class="result-card">
-            <div class="result-label">Estimated Bike Rentals</div>
-            <div class="result-number">{prediction:,}</div>
-            <div class="result-label">Predicted rental demand</div>
-        </div>
-        """, unsafe_allow_html=True)
+        # Display result
+        st.divider()
+
+        st.subheader("🎯 Prediction Result")
+
+        st.markdown(
+            f"""
+            <div class="result-card">
+                <h2>Estimated Bike Rentals</h2>
+                <h1>{prediction:,}</h1>
+                <p style="color:#bbf7d0;">
+                    Predicted rental demand
+                </p>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
         st.success("Prediction completed successfully!")
 
         st.caption(
-            "Note: This is a Machine Learning estimate, not a guaranteed "
-            "actual rental count."
+            "Note: This is a Machine Learning estimate, "
+            "not a guaranteed actual rental count."
         )
 
 
-# ---------------- MODEL PERFORMANCE ----------------
+# ==================================================
+# MODEL PERFORMANCE PAGE
+# ==================================================
+
 elif page == "Model Performance":
 
-    st.markdown("## 📈 Model Performance")
-    st.write("Performance of the tuned XGBoost regression model.")
+    st.header("📈 Model Performance")
 
-    c1, c2, c3 = st.columns(3)
+    st.write(
+        "Performance metrics of the tuned XGBoost regression model."
+    )
 
-    with c1:
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
         st.metric("R² Score", "0.9605")
 
-    with c2:
+    with col2:
         st.metric("MAE", "21.89")
 
-    with c3:
+    with col3:
         st.metric("RMSE", "36.32")
 
-    st.markdown("---")
-    st.markdown("### Performance Interpretation")
+    st.divider()
+
+    st.subheader("Performance Interpretation")
 
     st.write("""
-    - **R² Score:** 0.9605 — the model explained approximately 96.05%
-      of the target variance on the evaluated test split.
-    - **MAE:** 21.89 — the average absolute prediction error was
-      approximately 21.89 rentals.
-    - **RMSE:** 36.32 — the root mean squared prediction error was
-      approximately 36.32 rentals.
+    **R² Score: 0.9605**
+
+    The model explained approximately 96.05% of the target
+    variance on the evaluated test split.
+
+    **MAE: 21.89**
+
+    The average absolute prediction error was approximately
+    21.89 rentals.
+
+    **RMSE: 36.32**
+
+    The root mean squared prediction error was approximately
+    36.32 rentals.
     """)
 
     st.info(
@@ -451,45 +554,62 @@ elif page == "Model Performance":
     )
 
 
-# ---------------- ABOUT PROJECT ----------------
+# ==================================================
+# ABOUT PROJECT PAGE
+# ==================================================
+
 elif page == "About Project":
 
-    st.markdown("## ℹ️ About This Project")
+    st.header("ℹ️ About Project")
 
     st.write("""
-    **Bike Rental Demand Prediction** is a Data Science and Machine
-    Learning project developed as part of ExcelR Project P716.
+    Bike Rental Demand Prediction is a Data Science and
+    Machine Learning project developed as part of ExcelR
+    Project P716.
 
-    The application predicts the expected number of bike rentals using
-    date, time, season and weather-related input features.
+    This application estimates the expected number of bike
+    rentals using date, time, season and weather-related features.
     """)
 
-    st.markdown("### Technology Stack")
+    st.divider()
 
-    tech1, tech2 = st.columns(2)
+    st.subheader("Technology Stack")
 
-    with tech1:
+    col1, col2 = st.columns(2)
+
+    with col1:
         st.info("🐍 Python")
         st.info("📊 Pandas")
         st.info("🔢 NumPy")
 
-    with tech2:
+    with col2:
         st.info("🤖 XGBoost")
         st.info("⚙️ Scikit-learn")
         st.info("🌐 Streamlit")
 
-    st.markdown("---")
-    st.markdown("### Project Information")
-    st.write("**Project:** Bike Rental Demand Prediction")
+    st.divider()
+
+    st.subheader("Project Information")
+
+    st.write("**Project Name:** Bike Rental Demand Prediction")
     st.write("**Project ID:** P716")
     st.write("**Model:** Tuned XGBoost Regressor")
-    st.write("**Application:** Streamlit Web App")
+    st.write("**Application:** Streamlit Web Application")
 
 
-# ---------------- FOOTER ----------------
-st.markdown("---")
+# ==================================================
+# FOOTER
+# ==================================================
+
+st.divider()
+
 st.markdown(
-    "<center style='color:#94a3b8;'>Bike Rental Demand Prediction "
-    "| ExcelR P716 | Machine Learning Project</center>",
+    """
+    <div class="footer">
+        Bike Rental Demand Prediction | ExcelR P716
+        <br>
+        Machine Learning Project
+    </div>
+    """,
     unsafe_allow_html=True
 )
