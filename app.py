@@ -130,7 +130,14 @@ footer {
 </style>
 """, unsafe_allow_html=True)
 
-
+[data-testid="stSidebar"] {
+    background: #111827;
+    border-right: 1px solid #263449;
+}
+[data-testid="stSidebar"] * {
+    color: #e5e7eb !important;
+}
+    
 # ---------------- SIDEBAR ----------------
 with st.sidebar:
     st.markdown("## 🚲 BIKE RENTAL")
